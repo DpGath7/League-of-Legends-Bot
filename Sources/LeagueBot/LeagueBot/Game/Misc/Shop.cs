@@ -16,7 +16,7 @@ namespace LeagueBot.Game.Misc
         private Dictionary<ShopItemTypeEnum, Point[]> ItemPositions = new Dictionary<ShopItemTypeEnum, Point[]>()
         {
             { ShopItemTypeEnum.Starting,  new Point[]{   new Point(580, 330), new Point(740, 330), new Point(940, 330) } },
-            { ShopItemTypeEnum.Early,     new Point[]{   new Point(580, 440),new Point(740, 440), new Point(940, 440) } },
+            { ShopItemTypeEnum.Early,     new Point[]{   new Point(580, 440), new Point(740, 440), new Point(940, 440) } },
             { ShopItemTypeEnum.Essential, new Point[]{   new Point(580, 550), new Point(740, 550), new Point(940, 550)} },
             { ShopItemTypeEnum.Offensive, new Point[]{   new Point(580, 660), new Point(740, 660), new Point(940, 660) } },
             { ShopItemTypeEnum.Defensive, new Point[]{   new Point(580, 770), new Point(740, 770), new Point(940, 770), new Point(940, 770) } },
@@ -36,7 +36,7 @@ namespace LeagueBot.Game.Misc
         {
             this.Opened = false;
         }
-        public void toogle()
+        public void toggle()
         {
             InputHelper.PressKey("P");
             BotHelper.InputIdle();
@@ -55,13 +55,13 @@ namespace LeagueBot.Game.Misc
             {
                 ItemsToBuy.Add(_item);
 
-                Logger.Write($"Added {_item.name} on items list");
+                Logger.WriteInformation($"Added {_item.name} on items list", "SHOP");
             }
         }
 
         public int getPlayerGold()
         {
-            return TextHelper.GetTextFromImage(767, 828, 118, 34);
+            return Api.player.getGold();
         }
 
         public void tryBuyItem()
@@ -70,19 +70,24 @@ namespace LeagueBot.Game.Misc
             {
                 foreach (Item _item in ItemsToBuy)
                 {
-                    BotHelper.Wait(1000);
                     if (_item.cost <= getPlayerGold())
                     {
                         if (_item.got == false)
                         {
-                            Logger.Write($"Character bought {_item.name}.");
-                            InputHelper.RightClick(_item.point.X, _item.point.Y, 200);
+                            InputHelper.LeftClick(705, 245);
+                            BotHelper.Wait(1000);
+                            InputHelper.InputWords(_item.name);
+                            BotHelper.Wait(1000);
+                            InputHelper.PressKey("Enter");
+                            BotHelper.Wait(250);
+                            InputHelper.PressKey("Enter");
+
+                            Logger.WriteInformation($"Character bought {_item.name}.","SHOP");
                             _item.got = true;
 
-                            BotHelper.Wait(500);
-                            Logger.Write($"{getPlayerGold().ToString()} gold remaining.");
+                            BotHelper.Wait(250);
+                            Logger.WriteInformation($"{getPlayerGold().ToString()} gold remaining.", "SHOP");
                             tryBuyItem();
-                            BotHelper.Wait(500);
                         }
                     }
                 }

@@ -22,7 +22,7 @@ namespace LeagueBot.Game.Misc
 
         public void toggle()
         {
-            InputHelper.LeftClick(1241, 920);
+            InputHelper.PressKey("Y");
             BotHelper.InputIdle();
             Locked = !Locked;
         }

@@ -9,11 +9,11 @@ namespace LeagueBot
 {
     public class StartCoop : PatternScript
     {
-        private const string MODE = "intermediate";
+        private const string MODE = "intro";
         
         private Random RandomTextSender;
         
-        private const string SELECTED_CHAMPION = "lux";
+        private const string SELECTED_CHAMPION = "ashe";
 
         public override void Execute()
         {
@@ -60,27 +60,31 @@ namespace LeagueBot
 
             while (client.mustSelectChamp() == false)
             {
+				client.clickFindMatchButton();
                 client.acceptMatch();
                 bot.wait(3000);
             }
 
             bot.log("Match found");
 
-            client.clickChampSearch();
-            bot.wait(2000);
-            bot.inputWords(SELECTED_CHAMPION);
+            string[] champs = io.getChamps();
 
-            bot.wait(2000);
+            if(champs.Length > 0)
+            {
+                foreach (string champ in champs)
+                {
+                    pickChamp(champ);
+                    client.clearChampSearch();
+                    bot.wait(150);
+                    client.clearChampSearch();
+                }
+            } else
+            {
+                pickChamp(SELECTED_CHAMPION);
+            }
 
-            client.selectFirstChampion();
 
-            bot.wait(2000);
-
-            client.lockChampion();
-
-            bot.wait(1500);
-
-            RandomTextSender = new Random();
+           /* RandomTextSender = new Random();
             switch (RandomTextSender.Next(5))
             {
                 case 1:
@@ -105,8 +109,20 @@ namespace LeagueBot
                     break;
             }
             //champion not selected?
-
+*/
             bot.executePattern("Coop");
+        }
+
+        void pickChamp(string champ)
+        {
+            client.clickChampSearch();
+            bot.wait(500);
+            bot.inputWords(champ);
+            bot.wait(300);
+            client.selectFirstChampion();
+            bot.wait(500);
+            client.lockChampion();
+            bot.wait(1000);
         }
     }
 }

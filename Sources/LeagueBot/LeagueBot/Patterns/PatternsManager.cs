@@ -74,6 +74,18 @@ namespace LeagueBot.Patterns
             {
                 Logger.WriteColor1("The following scripts were found:");
                 Logger.Write(PatternsManager.ToString());
+                Logger.WriteColor1("Apply game settings? Type 'apply settings'");
+            }
+            else if(name.ToLower() == "apply settings")
+            {
+                Game.Settings.LeagueManager.ApplySettings();
+            }
+            else if (name == "Restart")
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo("LeagueBot.exe");
+                startInfo.Arguments = "StartCoop";
+                Process.Start(startInfo);
+                Environment.Exit(0);
             }
             else if (!Scripts.ContainsKey(name))
             {
@@ -85,9 +97,11 @@ namespace LeagueBot.Patterns
                 script.bot = new BotApi();
                 script.client = new ClientApi();
                 script.game = new GameApi();
+                script.io = new FileIO(Directory.GetCurrentDirectory() + "\\champlist.txt");
                 script.Execute();
             }
         }
+
         public static string ToString()
         {
             StringBuilder sb = new StringBuilder();

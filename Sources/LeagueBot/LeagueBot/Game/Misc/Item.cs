@@ -20,5 +20,36 @@ namespace LeagueBot.Game.Misc
             buyOrder = buyorder;
             point = position;
         }
+
+        public string getItemName()
+        {
+            return this.name;
+        }
+
+        public void setItemName(string name)
+        {
+            this.name = name;
+        }
+
+        public int getCost()
+        {
+            return this.cost;
+        }
+
+        public void setCost(int cost)
+        {
+            this.cost = cost;
+        }
+
+        public bool getGot()
+        {
+            return this.got;
+        }
+
+        public void setGot(bool got)
+        {
+            this.got = got;
+        }
+
     }
 }
